@@ -52,4 +52,8 @@ export class Roll {
     private get type() {
         return this._result[0];
     }
+
+    getContent() {
+        return this._result;
+    }
 }

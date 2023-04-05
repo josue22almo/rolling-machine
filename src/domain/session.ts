@@ -3,9 +3,11 @@ import {Account} from "./account";
 
 export class Session {
     private _credits: number;
+    public readonly id: string;
 
-    constructor(credits = 10) {
+    constructor(credits = 10, id: string) {
         this._credits = credits;
+        this.id = id;
     }
 
     get credits(): number {
@@ -34,7 +36,8 @@ export class Session {
     }
 
     cashOut(account: Account) {
-        account.deposit(this._credits);
+        account.deposit(this._credits)
+        this._credits = 0;
     }
 
     private guessProbability(number: number): boolean {

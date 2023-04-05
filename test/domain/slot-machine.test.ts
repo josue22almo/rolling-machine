@@ -105,6 +105,7 @@ describe("Slot machine", () => {
     session.cashOut(account);
 
     expect(account.balance).toEqual(100);
+    expect(session.credits).toEqual(0);
   });
 });
 
