@@ -26,6 +26,7 @@ export class SessionRouter {
         }
         res.send({
             id: session.id,
+            credits: session.credits,
         });
     }
 
@@ -37,6 +38,7 @@ export class SessionRouter {
         }
         res.send({
             id: session.id,
+            credits: session.credits,
         });
     }
 
