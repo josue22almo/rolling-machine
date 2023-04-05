@@ -1,32 +1,30 @@
-How to use:
+# Description
 
-1. Create new repo using this template
+- Architecture: it could be a simple MVC or an hexagonal architecture approach. For this simple exercise I prefer MVC.
 
-    https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template
+- The domain of the application would be coded following TDD. The main test scenarios has been described by you in the exercise assessment. Possible names for the models could be session and account.
 
-2. Install dependencies
+- We would need 5 controllers that map to the following use cases:
+  - Get session.
+  - Create session. Here we must remember the domain clause about creating a session with 10 credits.
+  - Roll session. The domain logic would be implemented following TDD.
+  - Cash out session
+  - Get account.
 
-    ```
-    yarn
-    ```
-3. Rename the project
+- To store the state of the session and the account we need a repository. We would define an interface for each repository with the needed methods (find, create, update...). But for simplicity, we will only have one implementation, in memory. That means that when restarting the backend we will lose our state. We can consider about implementing a filesystem repository.
 
-    - Rename static values:
+- Each use case should be mapped into a endpoint, like follows:
+  - Get session: GET /session
+  - Create session: POST /session
+  - Roll session: POST /session/:id/roll
+  - Cash out: PUT /session/:I'd
+  - Get account: GET /account
 
-    ```
-    Search/Replace typescript-template
-    ```
-    - Rename package name:
+That's only the backend side.
 
-    ```
-    //package.json
-    name: "some-project-name"
-    ```
+The frontend it's a simple page implementing the desire solution.
 
-4. Done! `yarn test` should pass
-
-5. Find errors in this repository or guide and update it!
-
+There is one point missing: cash out button. The backend is ready but the button is not in the frontend.
 
 # TDD
 
@@ -43,5 +41,5 @@ How to use:
   random.
 - [x] When a user has between 40 and 60 credits and a has a winning roll, the session must re-roll it with a 30% probability.
 - [x] When a user has above 60 credits and a has a winning roll, the session must re-roll it with a 60% probability.
-- [ ] the session must be store in the system
+- [x] the session must be store in the system
 - [x] cashing out transfer the money to the user account.
