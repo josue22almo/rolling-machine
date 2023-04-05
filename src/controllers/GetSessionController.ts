@@ -8,5 +8,9 @@ export class GetSessionController {
     get(id: string): Session | undefined {
         return  this.sessionRepository.get(id);
     }
+
+    getAll() {
+        return this.sessionRepository.getAll();
+    }
 }
 

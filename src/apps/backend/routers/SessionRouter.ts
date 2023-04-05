@@ -12,10 +12,22 @@ export class SessionRouter {
     constructor(private readonly sessionRepository: SessionRepository, private readonly accountRepository: AccountRepository) {
         this.router = Router();
 
-        this.router.get("/session/:id", (req, res) => this.getSession(req, res));
+        this.router.get("/session", (req, res) => this.getAllSession(req, res));
         this.router.post("/session", (req, res) => this.createSession(req, res));
+        this.router.get("/session/:id", (req, res) => this.getSession(req, res));
         this.router.post("/session/:id/roll", (req, res) => this.rollSession(req, res));
         this.router.post("/session/:id/cash-out", (req, res) => this.cashOutSession(req, res));
+    }
+
+    private getAllSession(req: Request, res: Response) {
+        const sessions = new GetSessionController(this.sessionRepository).getAll();
+
+        res.send({
+            sessions: sessions.map(s => ({
+                id: s.id,
+                credits: s.credits,
+            }))
+        });
     }
 
     private getSession(req: Request, res: Response) {
@@ -45,6 +57,10 @@ export class SessionRouter {
     private rollSession(req: Request, res: Response) {
         try {
             const roll = new RollSessionController(this.sessionRepository).roll(req.params.id);
+            if (roll === undefined) {
+                res.status(400).send("No more credits");
+                return;
+            }
             res.send({
                 roll: {
                     content: roll.getContent(),

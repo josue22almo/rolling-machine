@@ -15,6 +15,9 @@ export class Session {
     }
 
     roll() {
+        if (this.credits === 0) {
+            return undefined;
+        }
         let roll = Roll.random();
 
         if (this.credits >= 40 && this.credits < 60 && roll.isSuccessful()) {
