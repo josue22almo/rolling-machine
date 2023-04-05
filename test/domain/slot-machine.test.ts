@@ -1,11 +1,10 @@
 import {describe, expect, test, afterEach} from '@jest/globals';
 
 import sinon from 'sinon';
-import {Roll} from '../src/roll';
-import {Session} from '../src/session';
-
-import {RollObjectMother} from "./RollObjectMother";
-import {Account} from "../src/account";
+import { Account } from '../../src/domain/account';
+import { Roll } from '../../src/domain/roll';
+import { RollObjectMother } from '../RollObjectMother';
+import {SessionObjectMother} from "../SessionObjectMother";
 
 describe("Slot machine", () => {
   afterEach(() => {
@@ -13,24 +12,24 @@ describe("Slot machine", () => {
   });
 
   test("a session must be created with 10 starting credits", () => {
-    const session = new Session();
+    const session = SessionObjectMother.empty();
     expect(session.credits).toEqual(10);
   });
 
   test("a session must be initiated with some credits", () => {
-    const session = new Session(100);
+    const session = SessionObjectMother.withCredits(100);
     expect(session.credits).toEqual(100);
   });
 
   test("one roll cost 1 credit", () => {
-    const session = new Session(20);
+    const session = SessionObjectMother.withCredits(20);
     sinon.stub(Roll, "random").returns(RollObjectMother.failed());
     session.roll();
     expect(session.credits).toEqual(19);
   });
 
   test("a successful roll should sum the roll reward to the session credits", () => {
-    const session = new Session(100);
+    const session = SessionObjectMother.withCredits(100);
     sinon.stub(Roll, "random").returns(RollObjectMother.chery());
 
     session.roll();
@@ -38,7 +37,7 @@ describe("Slot machine", () => {
   });
 
   test("When a user has less than 40 credits in the game session, their rolls are truly random", () => {
-    const session = new Session();
+    const session = SessionObjectMother.empty();
 
     const randomSpy = sinon.stub(Roll, "random").returns(RollObjectMother.failed());
 
@@ -51,7 +50,7 @@ describe("Slot machine", () => {
 
 
   test("When a user has between 40 and 60 credits and did a winning roll, the session must re-roll it with a 30% probability.", () => {
-    const session = new Session(50);
+    const session = SessionObjectMother.withCredits(50);
 
     const randomSpy = sinon.stub(Roll, "random").returns(RollObjectMother.chery());
 
@@ -63,7 +62,7 @@ describe("Slot machine", () => {
   });
 
   test("When a user has above 60 credits and did a winning roll, the session must re-roll it with a 60% probability", () => {
-    const session = new Session(70);
+    const session = SessionObjectMother.withCredits(70);
 
     const randomSpy = sinon.stub(Roll, "random").returns(RollObjectMother.chery());
 
@@ -101,7 +100,7 @@ describe("Slot machine", () => {
 
   test("cashing out should transfer the credits to the user account", () => {
     const account = new Account();
-    const session = new Session(100);
+    const session = SessionObjectMother.withCredits(100);
 
     session.cashOut(account);
 

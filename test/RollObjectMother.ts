@@ -1,5 +1,5 @@
-import {Roll} from "../src/roll";
-import {ERoolValue} from "../src/ERoolValue";
+import {Roll} from "../src/domain/roll";
+import {ERoolValue} from "../src/domain/ERoolValue";
 
 export class RollObjectMother {
     static failed() {
