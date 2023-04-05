@@ -27,7 +27,7 @@
     "typescript": "4.3.5"
   },
   "scripts": {
-    "start": "node dist/src/index.js",
+    "start:backend": "node dist/src/apps/backend/index.js",
     "dev": "NODE_ENV=development node dist/src/index.js",
     "predev": "yarn run build:only",
     "build:only": "yarn run clean:dist && tsc -p tsconfig.json --pretty",
