@@ -5,4 +5,4 @@ import {InMemorySessionRepository} from "../../infrastructure/InMemorySessionRep
 new App(
     new InMemorySessionRepository(),
     new InMemoryAccountRepository()
-).start(3000);
+).start(8080);

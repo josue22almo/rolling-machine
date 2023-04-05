@@ -1,5 +1,7 @@
 import express, {Application, Router} from "express";
 import logger from "morgan";
+import cors from "cors";
+
 import {SessionRepository} from "../../domain/SessionRepository";
 import {AccountRepository} from "../../domain/AccountRepository";
 import * as http from "http";
@@ -16,6 +18,7 @@ export class App {
         this.app.use(logger('dev'));
         this.app.use(express.json());
         this.app.use(express.urlencoded({ extended: false }));
+        this.app.use(cors())
 
         this.addRouter(new SessionRouter(sessionRepository, accountRepository).router);
         this.addRouter(new AccountRouter(accountRepository).router);

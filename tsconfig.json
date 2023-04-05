@@ -12,6 +12,9 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node",
-    "outDir": "dist",
-  }
+    "outDir": "dist"
+  },
+  "exclude": [
+    "src/apps/frontend"
+  ]
 }
