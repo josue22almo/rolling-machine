@@ -7,6 +7,16 @@ import {RollController} from "../controllers/RollController";
 import {CreateSessionController} from "../controllers/CreateSessionController";
 import {FetchAccountController} from "../controllers/FetchAccountController";
 
+
+class CashOutController {
+  async cashOut(sessionId: string) {
+    console.log(`Cashing out session ${sessionId}...`)
+    await fetch(`http://localhost:8080/session/${sessionId}/cash-out`, {
+      method: "POST",
+    });
+  }
+}
+
 export function GameViewModel() {
   const [appState, setAppState] = useState<"awaiting" | "playing">("awaiting");
 
@@ -29,6 +39,7 @@ export function GameViewModel() {
       return;
     }
     setIsLoading(true);
+
     setCurrentRoll({
       content: ["X", "X", "X"],
       isSuccessful: false,
@@ -63,6 +74,7 @@ export function GameViewModel() {
 
     await fetchSession(session!.id);
     setIsLoading(false);
+    resetCashOutButtonStyle();
   }
 
   const fetchOrCreateSession = async () => {
@@ -91,6 +103,35 @@ export function GameViewModel() {
     }
   }
 
+  const [cashOutButtonStyle, setCashOutButtonStyle] = useState({left: "", disable: false});
+
+  function guessProbability(number: number): boolean {
+    const random = Math.floor(Math.random() * 100);
+    return random > number;
+  }
+
+  const resetCashOutButtonStyle = () => {
+    setCashOutButtonStyle({left: "", disable: false});
+  }
+
+  const cashOut = async () => {
+    await new CashOutController().cashOut(session!.id);
+    await fetchSession(session!.id);
+    await fetchAccount();
+  }
+
+  const moveCashOutButton = () => {
+    let leftMovement = "";
+    let disable = false;
+    if (guessProbability(50)) {
+      leftMovement = "300px";
+    }
+    if (guessProbability(40)) {
+      disable = true;
+    }
+    setCashOutButtonStyle({left: leftMovement, disable});
+  }
+
   return {
     appState,
     session,
@@ -100,6 +141,10 @@ export function GameViewModel() {
     error,
     isLoading,
     init,
-    roll
+    roll,
+    cashOutButtonStyle,
+    resetCashOutButtonStyle,
+    moveCashOutButton,
+    cashOut
   }
 }

@@ -19,8 +19,12 @@ function App() {
           currentRoll={viewModel.currentRoll}
           onRoll={viewModel.roll}
           onInit={viewModel.init}
+          onCashOut={viewModel.cashOut}
           message={viewModel.message}
           error={viewModel.error}
+          cashOutButtonStyle={viewModel.cashOutButtonStyle}
+          resetCashOutButtonStyle={viewModel.resetCashOutButtonStyle}
+          moveCashOutButton={viewModel.moveCashOutButton}
         />
 
       </header>
