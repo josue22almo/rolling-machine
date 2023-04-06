@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import Alert from 'react-bootstrap/Alert';
 
 import './App.css';
@@ -25,7 +25,6 @@ function App() {
     try {
       const sessionResponse = await fetch(`http://localhost:8080/session`);
       const data = await sessionResponse.json();
-      console.log("session response data",data);
       if (data.sessions.length > 0) {
         setSession(data.sessions[0]);
       } else {
@@ -40,7 +39,6 @@ function App() {
       setAccount(accountData);
       setAppState("playing")
     } catch (e) {
-      console.log(e);
       setError("Error fetching session");
     }
   }
@@ -61,7 +59,6 @@ function App() {
 
     const response = await fetch(`http://localhost:8080/session/${session!.id}/roll`, { method: "POST" });
     const data = await response.json();
-    console.log("roll session response data",data);
 
     const rolls = []
 
