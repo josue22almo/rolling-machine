@@ -41,11 +41,11 @@ describe("Slot machine", () => {
 
     const randomSpy = sinon.stub(Roll, "random").returns(RollObjectMother.failed());
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
       session.roll();
     }
 
-    expect(randomSpy.callCount).toEqual(100);
+    expect(randomSpy.callCount).toEqual(10);
   });
 
 

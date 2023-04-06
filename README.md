@@ -1,4 +1,40 @@
-# Description
+
+# Table of contents
+
+- [How to run the application](#how-to-run-the-application)
+- [How to run the tests](#how-to-run-the-tests)
+- [Images](#images)
+- [Decisions](#decisions)
+
+
+# How to run the application
+
+Follow the next steps to run the application:
+
+- Clone the repository
+- Install the dependencies with `npm install`
+- Run the backend with `npm run start:backend`
+- Run the frontend with `npm run start:frontend`
+- Open the browser in `http://localhost:3000`
+- Enjoy the game
+
+# How to run the tests
+
+Follow the next steps to run the tests:
+
+- Clone the repository
+- Install the dependencies with `npm install`
+- Run the tests with `npm run test`
+- Enjoy the results
+
+# Images
+
+![img.png](images/img.png)
+![img_1.png](images/img_1.png)
+![img_2.png](images/img_2.png)
+![img_3.png](images/img_3.png)
+
+# Decisions
 
 - Architecture: it could be a simple MVC or an hexagonal architecture approach. For this simple exercise I prefer MVC.
 
@@ -29,7 +65,7 @@ There is one point missing: cash out button. The backend is ready but the button
 # TDD
 
 - [x] on roll cost 1 credit
-- [ ] A roll consist of 3 blocks:
+- [x] A roll consist of 3 blocks:
   - [x] chery (10 credits rewards)
   - [x] lemon (20 credits rewards) 
   - [x] orange (30 credits rewards) 

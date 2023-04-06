@@ -20,28 +20,7 @@ function App() {
   }>();
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
-  const init = async () => {
-    try {
-      const sessionResponse = await fetch(`http://localhost:8080/session`);
-      const data = await sessionResponse.json();
-      if (data.sessions.length > 0) {
-        setSession(data.sessions[0]);
-      } else {
-        const createSessionResponse = await fetch(`http://localhost:8080/session`, { method: "POST" });
-        const createSessionData = await createSessionResponse.json();
-
-        await fetchSession(createSessionData.id);
-      }
-
-      const accountResponse = await fetch(`http://localhost:8080/account`);
-      const accountData = await accountResponse.json();
-      setAccount(accountData);
-      setAppState("playing")
-    } catch (e) {
-      setError("Error fetching session");
-    }
-  }
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchSession = async (id: string) => {
     const sessionResponse = await fetch(`http://localhost:8080/session/${id}`);
@@ -54,65 +33,94 @@ function App() {
       setError("No credits available");
       return;
     }
-    setCurrentRoll(undefined);
+    setIsLoading(true);
+    setCurrentRoll({
+        content: ["X", "X", "X"],
+        isSuccessful: false,
+        reward: 0
+    });
     setMessage("Rolling...");
 
     const response = await fetch(`http://localhost:8080/session/${session!.id}/roll`, { method: "POST" });
     const data = await response.json();
 
-    const rolls = []
+    const roll = ["X", "X", "X"];
 
     const sleep = (seconds: number) => {
-        return new Promise(resolve => setTimeout(resolve, seconds * 1000));
+      return new Promise(resolve => setTimeout(resolve, seconds * 1000));
     }
 
+    await sleep(0.5);
     for (let i = 0; i < data.roll.content.length; i++) {
-        rolls.push(data.roll.content[i]);
-        setCurrentRoll({
-            content: rolls,
-            isSuccessful: data.roll.isSuccessful,
-            reward: data.roll.reward
-        });
-        await sleep(1);
+      roll[i] = data.roll.content[i];
+      setCurrentRoll({
+        content: roll,
+        isSuccessful: data.roll.isSuccessful,
+        reward: data.roll.reward
+      });
+      await sleep(2);
     }
 
     if (data.roll.isSuccessful) {
-        setMessage(`You won ${data.roll.reward} credits!`);
+      setMessage(`You won ${data.roll.reward} credits!`);
     } else {
-        setMessage(`You lost this roll!`);
+      setMessage(`You lost this roll!`);
     }
 
     await fetchSession(session!.id);
+    setIsLoading(false);
+  }
+
+  const fetchOrCreateSession = async () => {
+    const sessionResponse = await fetch(`http://localhost:8080/session`);
+    const data = await sessionResponse.json();
+    if (data.sessions.length > 0) {
+      setSession(data.sessions[0]);
+    } else {
+      const createSessionResponse = await fetch(`http://localhost:8080/session`, { method: "POST" });
+      const createSessionData = await createSessionResponse.json();
+
+      await fetchSession(createSessionData.id);
+    }
+  }
+
+  const fetchAccount = async () => {
+    const accountResponse = await fetch(`http://localhost:8080/account`);
+    const accountData = await accountResponse.json();
+    setAccount(accountData);
+  }
+
+  const init = async () => {
+    try {
+      await fetchOrCreateSession();
+      await fetchAccount();
+      setAppState("playing");
+    } catch (e) {
+      setError("Error fetching session");
+    }
   }
 
   function selectItemStyle(item: string) {
+    const style = {
+      alignItems: "center",
+      justifyContent: 'center',
+      backgroundColor: "gray",
+    }
     switch (item) {
       case "cherry":
-        return {
-          backgroundColor: "red",
-          alignItems: "center",
-          justifyContent: 'center'
-        }
+        style.backgroundColor = "red";
+        break;
       case "lemon":
-        return {
-          backgroundColor: "yellow",
-          alignItems: "center",
-          justifyContent: 'center'
-        }
+        style.backgroundColor = "yellow";
+        break;
       case "orange":
-        return {
-          backgroundColor: "orange",
-          alignItems: "center",
-          justifyContent: 'center'
-
-        }
+        style.backgroundColor = "orange";
+        break;
       case "watermelon":
-        return {
-          backgroundColor: "pink",
-          alignItems: "center",
-          justifyContent: 'center'
-        }
+        style.backgroundColor = "pink";
+        break;
     }
+    return style;
   }
 
   return (
@@ -144,7 +152,7 @@ function App() {
                         </div>
                       )
                   }
-                  <button onClick={roll}>
+                  <button onClick={roll} disabled={isLoading}>
                     Roll
                   </button>
                 </div>
@@ -164,7 +172,6 @@ function App() {
                 </Alert>
             )
         }
-
       </header>
     </div>
   );
