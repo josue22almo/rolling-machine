@@ -1,9 +1,7 @@
 import React from 'react';
 
 import './App.css';
-import {StartGame} from "./components/StartGame";
 import {Game} from "./components/Game";
-import {Message} from "./components/Message";
 import {GameViewModel} from "./view-models/GameViewModel";
 
 
