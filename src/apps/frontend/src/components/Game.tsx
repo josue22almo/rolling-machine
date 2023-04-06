@@ -14,9 +14,10 @@ interface Props {
   onRoll: () => void;
   onInit: () => void;
   onCashOut: () => void;
+  onDeposit: () => void;
   message: string | undefined;
   error: string | undefined;
-  cashOutButtonStyle: { left: string, disable: boolean };
+  cashOutButtonStyle: { top: string, disable: boolean };
   resetCashOutButtonStyle: () => void;
   moveCashOutButton: () => void;
 }
@@ -30,6 +31,7 @@ export function Game({
    onRoll,
    onInit,
    onCashOut,
+   onDeposit,
    message,
    error,
    cashOutButtonStyle,
@@ -85,10 +87,13 @@ export function Game({
         <button onClick={onRoll} disabled={isLoading}>
           Roll
         </button>
+        <button onClick={onDeposit} disabled={isLoading || !account.balance}>
+          Deposit
+        </button>
         <button
           onClick={onCashOut}
-          disabled={cashOutButtonStyle.disable || isLoading}
-          style={{position: "absolute", left: cashOutButtonStyle.left}}
+          disabled={cashOutButtonStyle.disable || isLoading || !session.credits}
+          style={{position: "absolute", top: cashOutButtonStyle.top}}
           onMouseOut={resetCashOutButtonStyle}
           onMouseOver={moveCashOutButton}
         >

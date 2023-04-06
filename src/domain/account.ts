@@ -12,4 +12,10 @@ export class Account {
     deposit(amount: number) {
         this._balance += amount;
     }
+
+  withdraw() {
+    const balance = this._balance;
+    this._balance = 0;
+    return balance;
+  }
 }

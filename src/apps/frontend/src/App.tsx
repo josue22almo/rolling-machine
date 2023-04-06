@@ -20,6 +20,7 @@ function App() {
           onRoll={viewModel.roll}
           onInit={viewModel.init}
           onCashOut={viewModel.cashOut}
+          onDeposit={viewModel.deposit}
           message={viewModel.message}
           error={viewModel.error}
           cashOutButtonStyle={viewModel.cashOutButtonStyle}

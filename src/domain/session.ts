@@ -47,4 +47,8 @@ export class Session {
         const random = Math.floor(Math.random() * 100);
         return random > number;
     }
+
+    deposit(account: Account) {
+        this._credits += account.withdraw();
+    }
 }

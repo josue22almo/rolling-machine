@@ -6,16 +6,9 @@ import {FetchSessionController} from "../controllers/FetchSessionController";
 import {RollController} from "../controllers/RollController";
 import {CreateSessionController} from "../controllers/CreateSessionController";
 import {FetchAccountController} from "../controllers/FetchAccountController";
+import {CashOutController} from "../controllers/CashOutController";
+import {DepositController} from "../controllers/DepositController";
 
-
-class CashOutController {
-  async cashOut(sessionId: string) {
-    console.log(`Cashing out session ${sessionId}...`)
-    await fetch(`http://localhost:8080/session/${sessionId}/cash-out`, {
-      method: "POST",
-    });
-  }
-}
 
 export function GameViewModel() {
   const [appState, setAppState] = useState<"awaiting" | "playing">("awaiting");
@@ -97,13 +90,22 @@ export function GameViewModel() {
     try {
       await fetchOrCreateSession();
       await fetchAccount();
+
       setAppState("playing");
     } catch (e) {
       setError("Error fetching session");
     }
   }
 
-  const [cashOutButtonStyle, setCashOutButtonStyle] = useState({left: "", disable: false});
+  const deposit = async () => {
+    setIsLoading(true);
+    await new DepositController().deposit(session!.id);
+    await fetchSession(session!.id);
+    await fetchAccount();
+    setIsLoading(false);
+  }
+
+  const [cashOutButtonStyle, setCashOutButtonStyle] = useState({top: "", disable: false});
 
   function guessProbability(number: number): boolean {
     const random = Math.floor(Math.random() * 100);
@@ -111,7 +113,7 @@ export function GameViewModel() {
   }
 
   const resetCashOutButtonStyle = () => {
-    setCashOutButtonStyle({left: "", disable: false});
+    setCashOutButtonStyle({top: "", disable: false});
   }
 
   const cashOut = async () => {
@@ -121,15 +123,15 @@ export function GameViewModel() {
   }
 
   const moveCashOutButton = () => {
-    let leftMovement = "";
+    let top = "";
     let disable = false;
     if (guessProbability(50)) {
-      leftMovement = "300px";
+      top = "300px";
     }
     if (guessProbability(40)) {
       disable = true;
     }
-    setCashOutButtonStyle({left: leftMovement, disable});
+    setCashOutButtonStyle({top, disable});
   }
 
   return {
@@ -145,6 +147,7 @@ export function GameViewModel() {
     cashOutButtonStyle,
     resetCashOutButtonStyle,
     moveCashOutButton,
-    cashOut
+    cashOut,
+    deposit
   }
 }

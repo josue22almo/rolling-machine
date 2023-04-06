@@ -5,6 +5,7 @@ import {GetSessionController} from "../../../controllers/GetSessionController";
 import {CreateSessionController} from "../../../controllers/CreateSessionController";
 import {RollSessionController} from "../../../controllers/RollSessionController";
 import {CashOutSessionController} from "../../../controllers/CashOutSessionController";
+import {DepositSessionController} from "../../../controllers/DepositSessionController";
 
 export class SessionRouter {
     readonly router: Router;
@@ -17,6 +18,7 @@ export class SessionRouter {
         this.router.get("/session/:id", (req, res) => this.getSession(req, res));
         this.router.post("/session/:id/roll", (req, res) => this.rollSession(req, res));
         this.router.post("/session/:id/cash-out", (req, res) => this.cashOutSession(req, res));
+        this.router.post("/session/:id/deposit", (req, res) => this.deposit(req, res));
     }
 
     private getAllSession(req: Request, res: Response) {
@@ -81,6 +83,18 @@ export class SessionRouter {
             new CashOutSessionController(this.sessionRepository, this.accountRepository).cashOut(req.params.id);
             res.send({
                 message: "Successfully cashed out",
+            })
+        } catch (e) {
+            res.status(404).send("Session not found");
+            return
+        }
+    }
+
+    private deposit(req: Request, res: Response) {
+        try {
+            new DepositSessionController(this.sessionRepository, this.accountRepository).deposit(req.params.id);
+            res.send({
+                message: "Successfully deposited",
             })
         } catch (e) {
             res.status(404).send("Session not found");

@@ -18,3 +18,4 @@ export class CashOutSessionController {
         this.accountRepository.update(account);
     }
 }
+
