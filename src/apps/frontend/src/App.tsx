@@ -6,31 +6,21 @@ import {GameViewModel} from "./view-models/GameViewModel";
 
 
 function App() {
-    const {
-        appState,
-        session,
-        account,
-        currentRoll,
-        message,
-        error,
-        isLoading,
-        init,
-        roll
-    } = GameViewModel();
+  const viewModel = GameViewModel();
 
   return (
     <div className="App">
       <header className="App-header">
         <Game
-            appState={appState}
-            account={account!}
-            session={session!}
-            isLoading={isLoading}
-            currentRoll={currentRoll}
-            onRoll={roll}
-            onInit={init}
-            message={message}
-            error={error}
+          appState={viewModel.appState}
+          account={viewModel.account!}
+          session={viewModel.session!}
+          isLoading={viewModel.isLoading}
+          currentRoll={viewModel.currentRoll}
+          onRoll={viewModel.roll}
+          onInit={viewModel.init}
+          message={viewModel.message}
+          error={viewModel.error}
         />
 
       </header>
